@@ -134,9 +134,10 @@ def main(args):
     model.print_trainable_parameters()  
 
     # Load Train Dataset
-    data = load_dataset(args.data_path)
-    #train_data, val_data = create_medical_dataset()
+    #data = load_dataset(args.data_path)
+    train_data, val_data = create_medical_dataset()
 
+    '''
     if args.cache_dataset and os.path.exists('datasets/cache/{}.bin'.format(args.data_path)):
         preprocess_data = torch.load('datasets/cache/{}.bin'.format(args.data_path))
         train_data, val_data = preprocess_data['train'], preprocess_data['val']
@@ -159,8 +160,8 @@ def main(args):
             torch.save({
                 'train': train_data, 'val': val_data
             }, cache_file)
-    
-
+    '''
+    '''
     # Load Extra Validation Dataset
     if args.extra_val_dataset:
         from LLMPruner.datasets.ppl_dataset import get_wikitext2, get_ptb
@@ -174,7 +175,8 @@ def main(args):
                 _, test_data = get_ptb(seq_len, None)
                 test_data = split_and_tokenizer(test_data, tokenizer, seq_len, field_name='sentence')
             val_data[extra_dataset] = test_data
-
+    '''
+    
     trainer = transformers.Trainer(
         model=model,
         train_dataset=train_data,
