@@ -22,6 +22,7 @@ from LLMPruner.peft import (
 )
 from LLMPruner.utils.prompter import Prompter, ZeroPrompter
 from LLMPruner.datasets.ppl_dataset import get_loaders
+from build_dataset import create_legal_dataset, create_medical_dataset
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -133,7 +134,10 @@ def main(args):
     model.print_trainable_parameters()  
 
     # Load Train Dataset
-    data = load_dataset(args.data_path)
+    # data = load_dataset(args.data_path)
+    train_data, val_data = create_medical_dataset()
+    
+    '''
     if args.cache_dataset and os.path.exists('datasets/cache/{}.bin'.format(args.data_path)):
         preprocess_data = torch.load('datasets/cache/{}.bin'.format(args.data_path))
         train_data, val_data = preprocess_data['train'], preprocess_data['val']
@@ -156,6 +160,7 @@ def main(args):
             torch.save({
                 'train': train_data, 'val': val_data
             }, cache_file)
+    '''
 
     # Load Extra Validation Dataset
     if args.extra_val_dataset:
